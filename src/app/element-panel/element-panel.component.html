@@ -1,0 +1,42 @@
+<div class="tabs">
+    <!-- Tabs -->
+    <ul class="tab-list">
+      <li *ngFor="let tab of tabs; let i = index" 
+          [class.active]="i === activeTabIndex" 
+          (click)="selectTab(i)">
+        {{ tab.label }}
+      </li>
+    </ul>
+  
+    <!-- Tab content -->
+    <div class="tab-content">
+      <!-- Text Elements -->
+      <div *ngIf="activeTabIndex === 0" class="elements template-elements">
+        <div *ngFor="let template of templateElements" class="element" (click)="onElementClick(template)">
+          {{ template.name }}
+        </div>
+      </div>
+      <div *ngIf="activeTabIndex === 1" class="elements text-elements">
+        <div *ngFor="let text of textElements" class="element" (click)="onElementClick(text)">
+          {{ text.label }}
+        </div>
+      </div>
+  
+      <!-- Graphic Elements -->
+      <div *ngIf="activeTabIndex === 2" class="elements graphic-elements">
+        <div *ngFor="let graphic of graphicElements" class="element" (click)="onElementClick(graphic)">
+          <div [ngClass]="graphic.className" class="graphic-shape"></div>
+          <span>{{ graphic.label }}</span>
+        </div>
+      </div>
+  
+      <!-- Image Elements -->
+      <div *ngIf="activeTabIndex === 3" class="elements image-elements">
+        <div *ngFor="let image of imageElements" class="element" (click)="onElementClick(image)">
+          <img [src]="image.src" alt="{{ image.label }}" />
+          <span>{{ image.label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  

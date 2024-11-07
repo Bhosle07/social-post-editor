@@ -1,0 +1,111 @@
+/* Tab Container Styling */
+.tabs {
+  display: flex; /* Flex container for tabs and content */
+  width: 500px;
+  height: 1024px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+}
+
+/* Vertical Tab List */
+.tab-list {
+  display: flex;
+  flex-direction: column; /* Make tabs vertical */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border-right: 2px solid #ccc; /* Add vertical border to separate tabs and content */
+  width: 300px; /* Adjust width of the tab panel */
+}
+
+.tab-list li {
+  padding: 10px 10px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-right: none;
+  background-color: #f1f1f1;
+  margin-bottom: 5px; /* Add space between tabs */
+}
+
+.tab-list li.active {
+  background-color: white;
+  border-right: 2px solid white;
+  font-weight: bold;
+}
+
+/* Tab Content Styling */
+.tab-content {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-left: none; /* Remove left border to connect with the active tab */
+  background-color: #fff;
+}
+
+/* Element List Styling */
+.elements {
+  display: flex;
+  flex-wrap: wrap;
+  width: 300px;
+  gap: 15px;
+}
+
+.element {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  width: 100px;
+  cursor: pointer;
+}
+
+.element img {
+  max-width: 80px;
+}
+
+.element span {
+  margin-top: 5px;
+}
+
+/* Graphic Shapes */
+.graphic-shape {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+/* Shape Styles */
+.circle {
+  border-radius: 50%;
+  background-color: lightblue;
+}
+
+.square {
+  background-color: lightcoral;
+}
+
+.rectangle {
+  width: 100px;
+  height: 50px;
+  background-color: lightgreen;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 70px solid lightgoldenrodyellow;
+}
+
+.star {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  background-color: lightpink;
+}
+
+.pentagon {
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  background-color: lightsalmon;
+}

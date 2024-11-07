@@ -1,0 +1,82 @@
+
+
+.socialpost-wrapper {
+    height: 1024px;
+    width: 1024px;
+    border: 2px solid black;
+    position: relative;
+    /* right: 0px; */
+    left: 540px;
+    overflow: hidden;
+}
+
+.socialpost-background {
+    position: relative;
+    height: 1024px;
+    width: 1024px;
+    overflow: hidden;
+}
+.content-wrapper {
+   position:absolute;
+   top: 0px;
+   height: 1024px;
+   width: 1024px;
+   overflow: hidden;
+  }
+
+  
+ 
+.graphic {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .circle {
+    border-radius: 50%;
+    height: 100px;
+    background-color: lightblue;
+  }
+  
+  .square {
+    background-color: lightgreen;
+  }
+  
+  .rectangle {
+    width: 150px;
+    height: 80px;
+    background-color: #2ecc71;
+  }
+  .square {
+    width: 100px;
+    height: 100px;
+    background-color: #e74c3c;
+  }
+  
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 100px solid #f39c12;
+  }
+  
+  .pentagon {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: #9b59b6;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  }
+  
+  .star {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: #f1c40f;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+  
+
+
+  

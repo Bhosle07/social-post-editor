@@ -1,0 +1,214 @@
+import { CommonModule } from '@angular/common';
+import { Component, Input, ElementRef, Renderer2, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-social-view',
+  standalone: true,
+  templateUrl: './social-view.component.html',
+  styleUrls: ['./social-view.component.css'],
+  imports: [CommonModule]
+})
+export class SocialViewComponent implements OnInit {
+  @Input() background: { imgSrc?: string; html?: string; position: { left: string; top: string } }[] = [];
+  @Input() content: { data: string; position: { left: string; top: string }; element: string; className?: string }[] = [];
+  @Input () config:any
+  @Input () socialcontent:string=''
+
+  private currentDraggedElement: HTMLElement | null = null;
+  private offsetX = 0;
+  private offsetY = 0;
+
+  constructor(private renderer: Renderer2, private el: ElementRef) {}
+
+  ngOnInit(): void {
+    const backgroundContainer = this.el.nativeElement.querySelector('.social-background');
+
+    // Render background elements
+    this.background.forEach(item => {
+      const backgroundElement = this.renderer.createElement('div');
+      this.renderer.setStyle(backgroundElement, 'position', 'absolute');
+      this.renderer.setStyle(backgroundElement, 'left', item.position.left);
+      this.renderer.setStyle(backgroundElement, 'top', item.position.top);
+
+      if (item.imgSrc) {
+        const imgElement = this.renderer.createElement('img');
+        this.renderer.setAttribute(imgElement, 'src', item.imgSrc);
+        this.renderer.setStyle(imgElement, 'width', '100px');
+        this.renderer.setStyle(imgElement, 'height', '100px');
+        this.renderer.setStyle(imgElement, 'object-fit', 'cover');
+        this.renderer.appendChild(backgroundElement, imgElement);
+      } else if (item.html) {
+        const htmlElement = this.renderer.createElement('div');
+        this.renderer.setProperty(htmlElement, 'innerHTML', item.html);
+        this.renderer.appendChild(backgroundElement, htmlElement);
+      }
+
+      this.renderer.appendChild(backgroundContainer, backgroundElement);
+    });
+
+    // Render content elements with draggable and resizable features
+    const contentContainer = this.el.nativeElement.querySelector('.content-wrapper');
+    this.content.forEach((item, index) => {
+      const contentElement = this.renderer.createElement(item.element);
+      contentElement.innerHTML = item.data;
+
+      // Set position styles
+      this.renderer.setStyle(contentElement, 'position', 'absolute');
+      this.renderer.setStyle(contentElement, 'left', item.position.left);
+      this.renderer.setStyle(contentElement, 'top', item.position.top);
+
+      // Add CSS class if specified
+      if (item.className) {
+        this.renderer.addClass(contentElement, item.className);
+      }
+
+      // Make the content editable and resizable
+      this.renderer.setAttribute(contentElement, 'contenteditable', 'true');
+      this.renderer.setStyle(contentElement, 'resize', 'both');  // Enable resizing in both directions
+      this.renderer.setStyle(contentElement, 'overflow', 'auto');  // Ensure content stays within bounds
+
+      // Dragging logic
+      this.renderer.setAttribute(contentElement, 'draggable', 'true');
+
+      this.renderer.listen(contentElement, 'dragstart', (event: DragEvent) => {
+        this.currentDraggedElement = contentElement;
+        this.offsetX = event.offsetX;
+        this.offsetY = event.offsetY;
+      });
+
+      this.renderer.listen(contentContainer, 'dragover', (event: DragEvent) => {
+        event.preventDefault(); // Necessary to allow dropping
+      });
+
+      this.renderer.listen(contentContainer, 'drop', (event: DragEvent) => {
+        event.preventDefault();
+        if (this.currentDraggedElement) {
+          const dropX = event.clientX - this.offsetX;
+          const dropY = event.clientY - this.offsetY;
+
+          // Update the position of the dragged element
+          this.renderer.setStyle(this.currentDraggedElement, 'left', `${dropX}px`);
+          this.renderer.setStyle(this.currentDraggedElement, 'top', `${dropY}px`);
+
+          // Update the position in the content array
+          this.content[index].position.left = `${dropX}px`;
+          this.content[index].position.top = `${dropY}px`;
+
+          // Reset current dragged element
+          this.currentDraggedElement = null;
+        }
+      });
+
+      // Listen for content changes and update the data model
+      this.renderer.listen(contentElement, 'input', (event) => {
+        const updatedData = event.target.innerHTML;
+        this.content[index].data = updatedData;  // Update content data dynamically
+      });
+
+      // Listen for resizing events and update position or size if needed
+      this.renderer.listen(contentElement, 'mouseup', () => {
+        const newPositionLeft = contentElement.style.left;
+        const newPositionTop = contentElement.style.top;
+
+        // Update the element's size and position in the content model
+        this.content[index].position.left = newPositionLeft;
+        this.content[index].position.top = newPositionTop;
+      });
+
+      this.renderer.appendChild(contentContainer, contentElement);
+    });
+  }
+}
+
+
+
+
+
+
+
+
+
+
+import { Component, } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClient
+import { RouterOutlet } from '@angular/router';
+import { ViewComponent } from "./view/view.component";
+import { SocialViewComponent } from './social-view/social-view.component';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, ViewComponent, SocialViewComponent,HttpClientModule],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  title = 'learning';
+
+  config = {
+    socialbackground: 'social-background',
+    'contenteditable':'contenteditable'
+  };
+  htmlContent: string = '<h1>Hello, World!</h1><p>This is rendered HTML.</p>';
+
+  data = {
+    background: [
+      { html: '<div class="block" style="width:50px; height:250px;  background-color: white;"></div>', position: { left: '10px', top: '0px' } },
+      { imgSrc: 'https://picsum.photos/100/100?random=3', position: { left: '', top: '0px' } }
+    ],
+    content: [
+      { data: 'This is a paragraph of text.', position: { left: '50px', top: '300px' }, element: 'div', className: 'paragraph' },
+      { data: 'Another heading', position: { left: '50px', top: '200px' }, element: 'h1', className: 'sub-title' },
+      { data: 'Another heading', position: { left: '50px', top: '250px' }, element: 'h2', className: 'sub-title' },
+      { data: 'Taj Hotel Chennais generosity during rains wins guests heart. Netizens pay tribute to Ratan Tata', position: { left: '50', top: '' }, element: 'p', className: 'description' },
+    ]
+  };
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+    this.loadExternalHTML();
+    // this.loadExternalCSS('http://192.168.10.56:8081/CSS/style.css'); // Replace with your CSS file path
+  }
+
+  loadExternalHTML() {
+    this.http.get('http://192.168.10.56:8081/index.html',{responseType:'text'}).subscribe(
+      (data)=>{
+        console.log(data)
+      }
+    )
+     
+  }
+  
+
+  loadExternalCSS(filePath: string) {
+    const linkElement = document.createElement('link');
+    linkElement.rel = 'stylesheet';
+    linkElement.href = filePath;
+    document.head.appendChild(linkElement);
+  }
+}
+
+
+
+
+
+
+
+
+config = {
+  socialbackground: 'social-background',
+};
+
+data = {
+  background: [
+    { html: '<div class="block" style="width:50px; height:250px;  background-color: white;"></div>', position: { left: '10px', top: '0px' } }, 
+    { imgSrc: 'https://picsum.photos/100/100?random=3', position: { left: '', top: '0px' } }
+  ],
+  content: [
+    { data: 'This is a paragraph of text.', position: { left: '50px', top: '300px' }, element: 'div', className: 'paragraph' },
+    { data: 'Another heading', position: { left: '50px', top: '200px' }, element: 'h1', className: 'sub-title' },
+    { data: 'Another heading', position: { left: '50px', top: '250px' }, element: 'h2', className: 'sub-title' },
+    { data: 'Taj Hotel Chennais generosity during rains wins guests heart. Netizens pay tribute to Ratan Tata', position: { left: '50', top: '' }, element: 'p', className: 'description' },
+  ]
+};

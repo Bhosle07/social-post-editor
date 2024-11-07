@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration=development --output-hashing=none",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+  "serve:ssr:learning": "node dist/learning/server/server.mjs",
+  "bundle":"npm run build && npx http-server dist/learning"
   },
   "private": true,
   "dependencies": {

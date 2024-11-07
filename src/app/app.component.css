@@ -1,0 +1,25 @@
+.app-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    position: relative;
+    margin: 5%;
+  }
+  
+  .elements-panel-container {
+    width: 500px;
+    border-right: 1px solid #ccc;
+    /* position: absolute; */
+    
+  }
+
+  .viewer-container {
+    width: 75%;
+    margin-left: 5%;
+    
+   
+  }
+
+
+  
+  
